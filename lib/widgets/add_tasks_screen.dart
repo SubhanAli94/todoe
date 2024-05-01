@@ -1,8 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class AddTasksScreen extends StatelessWidget {
-  const AddTasksScreen({super.key});
+  final Function onAdd;
+  AddTasksScreen({super.key, required this.onAdd});
+
+  final myController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -26,20 +30,22 @@ class AddTasksScreen extends StatelessWidget {
                   color: Colors.lightBlueAccent,
                   fontWeight: FontWeight.w700),
             ),
-            const TextField(
+            TextField(
               autofocus: true,
               textAlign: TextAlign.center,
+              controller: myController,
             ),
             TextButton(
               onPressed: () {
-                print('');
+                onAdd(myController.text);
+                Navigator.pop(context);
               },
               child: Container(
                 width: double.infinity,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                     shape: BoxShape.rectangle, color: Colors.lightBlueAccent),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12.0),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 12.0),
                   child: Text(
                     textAlign: TextAlign.center,
                     'Add',

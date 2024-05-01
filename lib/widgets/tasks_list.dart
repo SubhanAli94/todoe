@@ -1,33 +1,31 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:todoe/widgets/tasks_tile.dart';
+import '../models/task_model.dart';
 import '../models/tasks.dart';
 
-class TasksList extends StatefulWidget {
-  @override
-  State<TasksList> createState() => _TasksListState();
-}
-
-class _TasksListState extends State<TasksList> {
-  List<Task> tasks = [
-    Task(text: 'Hello, World', isChecked: false),
-    Task(text: 'Hello, World1', isChecked: false),
-    Task(text: 'Hello, World2', isChecked: false),
-  ];
-
+class TasksList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: tasks.length,
-      itemBuilder: (context, index) {
-        return TaskTile(
-            isChecked: tasks[index].isChecked,
-            text: tasks[index].text,
-            onPressed: () {
-              setState(() {
-                tasks[index].toggleCheckBox();
-              });
-            });
+    return Consumer<TaskModel>(
+      builder: (BuildContext context, TaskModel taskModel, Widget? child) {
+        return ListView.builder(
+          itemCount: taskModel.taskCount,
+          itemBuilder: (context, index) {
+            final task = taskModel.tasks[index];
+            return TaskTile(
+              isChecked: task.isChecked,
+              text: task.text,
+              onPressed: () {
+                taskModel.updateTask(task);
+              },
+              onLongPress: () {
+                taskModel.deleteTask(task);
+              },
+            );
+          },
+        );
       },
     );
   }

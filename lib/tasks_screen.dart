@@ -1,16 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todoe/models/task_model.dart';
 import 'package:todoe/widgets/add_tasks_screen.dart';
 import 'package:todoe/widgets/tasks_list.dart';
 
-class TasksScreen extends StatefulWidget {
-  const TasksScreen({super.key});
+import 'models/tasks.dart';
 
-  @override
-  State<TasksScreen> createState() => _TasksScreenState();
-}
-
-class _TasksScreenState extends State<TasksScreen> {
+class TasksScreen extends StatelessWidget {
   bool isSelected = false;
 
   @override
@@ -31,19 +28,23 @@ class _TasksScreenState extends State<TasksScreen> {
                   return SingleChildScrollView(
                       padding: EdgeInsets.only(
                           bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: AddTasksScreen());
+                      child: AddTasksScreen(onAdd: (value) {
+                        Provider.of<TaskModel>(context, listen: false)
+                            .addTask(value);
+                        // tasks.add(Task(text: value, isChecked: false));
+                      }));
                 });
           }),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.only(
+          Padding(
+            padding: const EdgeInsets.only(
                 top: 60.0, bottom: 40.0, left: 30.0, right: 30.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CircleAvatar(
+                const CircleAvatar(
                   radius: 26.0,
                   backgroundColor: Colors.white,
                   child: Icon(
@@ -52,10 +53,10 @@ class _TasksScreenState extends State<TasksScreen> {
                     size: 30.0,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20.0,
                 ),
-                Text(
+                const Text(
                   'Todoe',
                   style: TextStyle(
                       color: Colors.white,
@@ -63,12 +64,12 @@ class _TasksScreenState extends State<TasksScreen> {
                       fontWeight: FontWeight.w700),
                 ),
                 Text(
-                  '12 Tasks',
-                  style: TextStyle(
+                  '${Provider.of<TaskModel>(context).taskCount} Tasks',
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 18.0,
                   ),
-                )
+                ),
               ],
             ),
           ),
